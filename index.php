@@ -7,14 +7,20 @@
   <link rel="stylesheet" type="text/css" href="main.css">    
 </head>
 <body>
-<div style="text-align:right;" name="cabecalho" id="cabecalho">
+<div class="cabecalho_body">
 <?php
+
 $usuario_cookie = isset($_COOKIE['nome_usuario'])?$_COOKIE['nome_usuario']:null;
 if(isset($usuario_cookie)){
-  echo"Bem-Vindo, $usuario_cookie!";
-  echo "&nbsp;<a href='#' onclick='window.location.reload()'>Inicio</a>";
-  echo "&nbsp;<a href='#' onclick='deslogar()'>Sair</a>";
-  echo "<hr>";
+  echo "
+    <div class='cabecalho_body_1' >
+      <img height='50' size='50'  src='media/imgs/home.png' alt='Minha Figura' onclick='window.location.reload();'>
+    </div>";
+  echo"
+    <div class='cabecalho_body_2'>
+      <span>Bem-Vindo, $usuario_cookie!</span>&nbsp;&nbsp;
+      <img height='50' size='50'  src='media/imgs/sair.png' alt='Minha Figura' onclick='deslogar();'>
+    </div>";
 }
 ?>
 </div>

@@ -1,13 +1,14 @@
-<form method="POST" action="#">
+<form id="form_participantes" method="POST" action="acao_listar_participantes.php">
 <label>Instituicao/Igreja:</label><input type="text" name="instituicao_busca" id="instituicao_busca"><br>
 <label>Nome da pessoa:</label><input type="text" name="nome_busca" id="nome_busca"><br>
-<input type="submit" value="Buscar"><br>
+<a class="botao botao_acao" href="#" onclick="acao_listar_participantes()">Buscar</a>
+
 </form>
 <?php
 include_once("main.php");
 
-$nome_busca = isset($_POST['nome_busca'])?$_POST['nome_busca']:null;
-$instituicao_busca = isset($_POST['instituicao_busca'])?$_POST['instituicao_busca']:null;
+$nome_busca = isset($_GET['nome_busca'])?$_GET['nome_busca']:null;
+$instituicao_busca = isset($_GET['instituicao_busca'])?$_GET['instituicao_busca']:null;
 
 $where_busca = ($nome_busca)?" AND pe.nome like '%$nome_busca%'":"";
 $where_busca = $where_busca.(($instituicao_busca)?" AND ins.nome like '%$instituicao_busca%'":"");
@@ -38,7 +39,7 @@ foreach ($participantes as $participante){
   $funcao_js = ($participante->situacao == "presente")?"informar_ausencia($participante->id);":"informar_presenca($participante->id);";
   echo "".
     "<div class='convidado $estilo_div'>".
-    "<a href='#' onclick='$funcao_js' class='botao $estilo_botao'>$texto_botao</a>".
+    "<a class='botao $estilo_botao' href='#' onclick='$funcao_js' >$texto_botao</a>".
     "    <h2>".$pessoa[0]->nome."</h2>".
     "    <span>".$pessoa[0]->cpf."</span><br>".
     "    <span>".$instituicao[0]->nome."</span>".

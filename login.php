@@ -1,8 +1,10 @@
-<form method="POST" action="#">
-<label>Usuario:</label><input type="text" name="usuario" id="usuario"><br>
-<label>Senha:</label><input type="password" name="senha" id="senha"><br>
-<input type="submit" value="entrar" id="entrar" name="entrar"><br>
-</form>
+<div class="login">
+  <form method="POST" action="#">
+    <label>Usuario:</label><br><input type="text" name="usuario" id="usuario"><br>
+    <label>Senha:</label><br><input type="password" name="senha" id="senha"><br><br>
+    <input class="submit_login" type="submit" value="Entrar" id="entrar" name="entrar"><br>
+  </form>
+</div>
 <?php
 include_once("main.php");
 

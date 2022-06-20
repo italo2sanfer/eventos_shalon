@@ -1,5 +1,5 @@
 <?php
-include_once("../main.php");
+include_once("main.php");
 
 $row = 1;
 if (($handle = fopen(PLANILHA_IMPORTACAO, "r")) !== FALSE) {
