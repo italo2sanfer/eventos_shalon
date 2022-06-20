@@ -1,4 +1,9 @@
-<form action="#" method="post">
+<?php
+$usuario_cookie = isset($_COOKIE['nome_usuario'])?$_COOKIE['nome_usuario']:null;
+if(!isset($usuario_cookie)) die("Voce deve estar logado!");
+?>
+
+<form id="form_cadastrar_usuario" method="post" action="acao_cadastrar_usuario.php">
  <p>Nome: <input type="text" name="nome" /></p>
  <p>CPF: <input type="text" name="cpf" /></p>
  <p>Email: <input type="text" name="email" /></p>
@@ -8,7 +13,7 @@
  <p>Nome de usuario: <input type="text" name="nome_usuario" /></p>
  <p>Senha: <input type="password" name="senha" /></p>
  <p>Confirmar Senha: <input type="password" name="confirmar_senha" /></p>
- <p><input type="submit" /></p>
+ <a class="botao botao_acao" href="#" onclick="acao_cadastrar_usuario()">Buscar</a>
 </form>
 <hr>
 
@@ -16,14 +21,14 @@
 
 include_once("main.php");
 
-$nome = isset($_POST['nome'])?$_POST['nome']:null;
-$cpf = isset($_POST['cpf'])?$_POST['cpf']:null;
-$email = isset($_POST['email'])?$_POST['email']:null;
-$telefone_contato = isset($_POST['telefone_contato'])?$_POST['telefone_contato']:null;
-$nome_usuario = isset($_POST['nome_usuario'])?$_POST['nome_usuario']:null;
-$senha = isset($_POST['senha'])?$_POST['senha']:null;
-$perfil_usuario = isset($_POST['perfil_usuario'])?$_POST['perfil_usuario']:null;
-$confirmar_senha = isset($_POST['confirmar_senha'])?$_POST['confirmar_senha']:null;
+$nome = isset($_GET['nome'])?$_GET['nome']:null;
+$cpf = isset($_GET['cpf'])?$_GET['cpf']:null;
+$email = isset($_GET['email'])?$_GET['email']:null;
+$telefone_contato = isset($_GET['telefone_contato'])?$_GET['telefone_contato']:null;
+$nome_usuario = isset($_GET['nome_usuario'])?$_GET['nome_usuario']:null;
+$senha = isset($_GET['senha'])?$_GET['senha']:null;
+$perfil_usuario = isset($_GET['perfil_usuario'])?$_GET['perfil_usuario']:null;
+$confirmar_senha = isset($_GET['confirmar_senha'])?$_GET['confirmar_senha']:null;
 
 if ($senha==$confirmar_senha and $senha!=null){
   $pessoas = $pdo->query( "SELECT id FROM pessoa where cpf='$cpf' and email='$email';")->fetchAll(PDO::FETCH_CLASS, 'Pessoa');

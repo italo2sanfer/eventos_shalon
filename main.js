@@ -2,18 +2,17 @@ function acao_listar_participantes(){
     var form = $("#form_participantes");
     $("#corpo").load("acao_listar_participantes.php?"+form.serialize());
 }
+function acao_cadastrar_usuario(){
+  var form = $("#form_cadastrar_usuario");
+  $("#corpo").load("acao_cadastrar_usuario.php?"+form.serialize());
+}
 function acao_csv_importar() { $("#corpo").load("acao_csv_importar.php"); }
 function acao_csv_verificar() { $("#corpo").load("acao_csv_verificar.php"); }
-function acao_cadastrar_usuario() { $("#corpo").load("acao_cadastrar_usuario.php"); }
-
-
-
-
 
 function informar_presenca(id_participante) {
   if (confirm('Deseja mesmo INFORMAR PRESENCA?')){
     $.ajax({
-      url:"troca_situacao.php",
+      url:"acao_trocar_situacao.php",
       type: "post",
       dataType: 'json',
       data: {id_participante: id_participante, situacao_final: "presente"},
@@ -27,7 +26,7 @@ function informar_presenca(id_participante) {
 function informar_ausencia(id_participante) {
   if (confirm('Deseja mesmo INFORMAR AUSENCIA?')){
     $.ajax({
-      url:"troca_situacao.php",
+      url:"acao_trocar_situacao.php",
       type: "post",
       dataType: 'json',
       data: {id_participante: id_participante, situacao_final: "ausente"},
@@ -38,10 +37,11 @@ function informar_ausencia(id_participante) {
     });
   }
 }
-function deslogar() {
+
+function sistema_deslogar() {
   if (confirm('Deseja mesmo DESLOGAR?')){
     $.ajax({
-      url:"deslogar.php",
+      url:"sistema_deslogar.php",
       type: "post",
       dataType: 'json',
       data: {},

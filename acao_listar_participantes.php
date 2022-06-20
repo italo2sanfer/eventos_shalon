@@ -1,3 +1,8 @@
+<?php
+$usuario_cookie = isset($_COOKIE['nome_usuario'])?$_COOKIE['nome_usuario']:null;
+if(!isset($usuario_cookie)) die("Voce deve estar logado!");
+?>
+
 <form id="form_participantes" method="POST" action="acao_listar_participantes.php">
 <label>Instituicao/Igreja:</label><input type="text" name="instituicao_busca" id="instituicao_busca"><br>
 <label>Nome da pessoa:</label><input type="text" name="nome_busca" id="nome_busca"><br>

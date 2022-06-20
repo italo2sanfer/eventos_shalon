@@ -1,8 +1,5 @@
-- Acao do botao submit em javascript
-- form login
 - modelo padrao de form para qualquer form;
 - encapsular chamadas de banco
-- separar index em tres divs e chamar tudo por include
 - faviicon que da erro no javascript;
 - colocar titulo sistema em main.php e na barra principal, em cima das outras infromacoes
 - impedir acesso sem cokkie em cada pagina do sistema

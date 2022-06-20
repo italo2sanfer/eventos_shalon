@@ -1,4 +1,13 @@
 <?php
+
+
+
+
+
+$usuario_cookie = isset($_COOKIE['nome_usuario'])?$_COOKIE['nome_usuario']:null;
+if(!isset($usuario_cookie)) die("Voce deve estar logado!");
+
+
 include_once("main.php");
 
 echo "<h1>Importador de csv</h1>";

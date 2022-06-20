@@ -40,7 +40,7 @@ class Usuario{
   public $perfil_usuario_id;
 }
 
-define('PLANILHA_IMPORTACAO', 'planilha_20220618.csv');
+define('PLANILHA_IMPORTACAO', 'media/planilha_20220618.csv');
 
 $host = "localhost"; $dbname = "eventos";
 $user = "root"; $password = "senhademariadb";
