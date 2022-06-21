@@ -12,7 +12,8 @@ if(isset($usuario_cookie)){
   $perfil_usuario = ($usuario)?get_by_id($pdo,"PerfilUsuario","perfil_usuario",$usuario->perfil_usuario_id):null;
   if ($perfil_usuario){
     foreach ($permissoes as $permissao){
-      if (str_contains($permissao["perfil_usuario"],$perfil_usuario->nome)){
+      $perfil_usuario_array = explode(",",$permissao["perfil_usuario"]);
+      if (in_array($perfil_usuario->nome,$perfil_usuario_array)){
         echo "<a class='botao botao_acao' href='#' onclick='".$permissao['acao']."()'>".$permissao['label']."</a>
           &nbsp;&nbsp;&nbsp;";
       }
