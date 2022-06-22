@@ -63,6 +63,11 @@ body{
   justify-content: flex-end;
 }
 
+.grid-center{
+  display: grid;
+  justify-content: center;
+}
+
 .login{
   margin: auto;
   margin-top: 10%;

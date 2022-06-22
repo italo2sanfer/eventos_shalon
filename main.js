@@ -6,11 +6,20 @@ function acao_cadastrar_usuario(){
   var form = $("#form_cadastrar_usuario");
   $("#corpo").load("acao_cadastrar_usuario.php?"+form.serialize());
 }
+function acao_trocar_senha_usuario(){
+  var form = $("#form_trocar_senha_usuario");
+  $("#corpo").load("acao_trocar_senha_usuario.php?"+form.serialize());
+}
+function acao_cadastrar_pessoa(){
+  var form = $("#form_cadastrar_pessoa");
+  $("#corpo").load("acao_cadastrar_pessoa.php?"+form.serialize());
+}
+
 function acao_csv_importar() { $("#corpo").load("acao_csv_importar.php"); }
 function acao_csv_verificar() { $("#corpo").load("acao_csv_verificar.php"); }
 
 function informar_presenca(id_participante) {
-  if (confirm('Deseja mesmo INFORMAR PRESENCA?')){
+  if (confirm('Deseja mesmo INFORMAR PRESENÇA?')){
     $.ajax({
       url:"acao_trocar_situacao.php",
       type: "post",
@@ -24,7 +33,7 @@ function informar_presenca(id_participante) {
   }
 }
 function informar_ausencia(id_participante) {
-  if (confirm('Deseja mesmo INFORMAR AUSENCIA?')){
+  if (confirm('Deseja mesmo INFORMAR AUSÊNCIA?')){
     $.ajax({
       url:"acao_trocar_situacao.php",
       type: "post",

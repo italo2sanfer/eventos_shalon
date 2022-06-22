@@ -30,17 +30,14 @@ $query_participantes = "SELECT pa.* ".
   "order by pa.situacao asc, ".
   "  pe.nome asc;";
 
-
-#echo $query_participantes;
-
 $participantes = $pdo->query($query_participantes)->fetchAll(PDO::FETCH_CLASS, 'Participante');
-echo "<h1>".$evento[0]->nome."</h1>";
+echo "<div class='grid-center'>";
 foreach ($participantes as $participante){
   $pessoa = $pdo->query("SELECT * FROM pessoa where id=$participante->pessoa_id;")->fetchAll(PDO::FETCH_CLASS, 'Pessoa');
   $instituicao = $pdo->query("SELECT * FROM instituicao where id='$participante->instituicao_id';")->fetchAll(PDO::FETCH_CLASS, 'Instituicao');
   $estilo_botao = ($participante->situacao == "presente")?"botao_presente":"botao_ausente";
   $estilo_div = ($participante->situacao == "presente")?"div_presente":"div_ausente";
-  $texto_botao = ($participante->situacao == "presente")?"Informar Ausencia":"Informar Presenca";
+  $texto_botao = ($participante->situacao == "presente")?"Informar Ausência":"Informar Presença";
   $funcao_js = ($participante->situacao == "presente")?"informar_ausencia($participante->id);":"informar_presenca($participante->id);";
   echo "".
     "<div class='convidado $estilo_div'>".
@@ -50,4 +47,5 @@ foreach ($participantes as $participante){
     "    <span>".$instituicao[0]->nome."</span>".
     "</div>";
 }
+echo "</div>";
 ?>

@@ -1,5 +1,6 @@
+- evitar que usuarios comum acessem acoes admin
+- Colocar pessoa->nome ao inves de usuario->nome_usuario no cookie
 - modelo padrao de form para qualquer form;
 - encapsular chamadas de banco
 - faviicon que da erro no javascript;
 - colocar titulo sistema em main.php e na barra principal, em cima das outras infromacoes
-- impedir acesso sem cokkie em cada pagina do sistema

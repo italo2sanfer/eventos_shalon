@@ -4,7 +4,9 @@ if(isset($usuario_cookie)){
   include_once("main.php");
   $permissoes = array(
      array("perfil_usuario"=>"admin,comum", "acao"=>"acao_listar_participantes", "label"=>"Listar Participantes"),
-     array("perfil_usuario"=>"admin,comum", "acao"=>"acao_cadastrar_usuario", "label"=>"Cadastrar Usuario"),
+     array("perfil_usuario"=>"admin", "acao"=>"acao_cadastrar_pessoa", "label"=>"Cadastrar Pessoa"),
+     array("perfil_usuario"=>"admin", "acao"=>"acao_cadastrar_usuario", "label"=>"Cadastrar Usuário"),
+     array("perfil_usuario"=>"admin", "acao"=>"acao_trocar_senha_usuario", "label"=>"Trocar Senha de Usuário"),
      array("perfil_usuario"=>"admin", "acao"=>"acao_csv_importar", "label"=>"Importar CSV"),
      array("perfil_usuario"=>"admin", "acao"=>"acao_csv_verificar", "label"=>"Verificar CSV"),
   );

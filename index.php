@@ -8,6 +8,6 @@
 </head>
 <body>
 <div class="cabecalho"><?php include "index_cabecalho.php"; ?></div>
-<div name="corpo" id="corpo"><?php include "index_corpo.php"; ?></div>
+<div class="grid-center" name="corpo" id="corpo"><?php include "index_corpo.php"; ?></div>
 </body>
 </html>

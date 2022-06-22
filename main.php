@@ -34,9 +34,8 @@ class PerfilUsuario{
   public $descricao;
 }
 class Usuario{
-  public $id;
-  public $senha;
-  public $pessoa_id;
+  public $id; public $nome_usuario;
+  public $senha; public $pessoa_id;
   public $perfil_usuario_id;
 }
 
@@ -66,6 +65,52 @@ function get_by_id($pdo,$classe,$tabela, $id){
   }
   return null;
 }
+function get_by_fields($pdo,$classe,$tabela, $fields){
+  $condicoes = array();
+  foreach ($fields as $field){
+    $valor = ($field['str']=="sim")?("'".$field['valor']."'"):$field['valor'];
+    array_push($condicoes,(" ".$field['nome']."=$valor "));
+  }
+  $were = implode(" and ",$condicoes);
+  $objeto = $pdo->query( "SELECT * FROM $tabela where $were;")->fetchAll(PDO::FETCH_CLASS, $classe);
+  if (count($objeto)>0){
+    return $objeto[0];
+  }
+  return null;
+}
+function get_all($pdo,$classe,$tabela){
+  $objetos = $pdo->query( "SELECT * FROM $tabela;")->fetchAll(PDO::FETCH_CLASS, $classe);
+  if (count($objetos)>0){
+    return $objetos;
+  }
+  return null;
+}
+function insert_object($pdo,$classe,$tabela,$fields){
+  $fields_insert = array();
+  $values_insert = array();
+  foreach ($fields as $field){
+    $valor = ($field['str']=="sim")?("'".$field['valor']."'"):$field['valor'];
+    array_push($fields_insert ,$field['nome']);
+    array_push($values_insert ,$valor);
+  }
+  $fields_insert_vai = implode(",",$fields_insert);
+  $fields_values_vai = implode(",",$values_insert);
+  $stmt = $pdo->prepare("INSERT INTO pessoa($fields_insert_vai) VALUES($fields_values_vai)");
+  $stmt->execute();
+  return $pdo->lastInsertId();
+}
+
+function get_selection($pdo,$classe,$tabela){
+  $objetos = get_all($pdo,$classe,$tabela);
+  $select_objeto = "<select name='$tabela'>";
+  foreach ($objetos as $objeto){
+    $select_objeto .= "<option value=".$objeto->id.">".$objeto->nome."</option>";
+  }
+  $select_objeto .="</select>";
+  return $select_objeto;
+}
+
+
 
 
 

@@ -7,7 +7,7 @@ if(isset($usuario_cookie)){
     </div>";
   echo"
     <div class='cabecalho_2'>
-      <span>Bem-Vindo, $usuario_cookie!</span>&nbsp;&nbsp;
+      <span>Bem-Vindo(a), $usuario_cookie!</span>&nbsp;&nbsp;
       <img height='50' size='50'  src='media/imgs/sair.png' alt='Minha Figura' onclick='sistema_deslogar();'>
     </div>";
 }
