@@ -172,8 +172,7 @@ class Participante{
 
 class ParticipanteAdmin{
   public function listar1_form($pdo,$POST){
-    $selection_pessoa = get_selection($pdo,"Pessoa","pessoa","id","nome");
-    $selection_perfil_usuario = get_selection($pdo,"PerfilUsuario","perfil_usuario","id","nome");
+    $select_perfil_usuario = get_select($pdo,"PerfilUsuario","perfil_usuario","id","nome");
     $funcaop = explode("_",$POST['funcao']);
     $classe = ($funcaop[0] == "crud")?$funcaop[1]:"";
     $id_form = "listar1_form";
@@ -250,16 +249,14 @@ class ParticipanteAdmin{
   public function adicionar1_form($pdo,$POST){
     $funcaop = explode("_",$POST['funcao']);
     $classe = ($funcaop[0] == "crud")?$funcaop[1]:"";
-    $selection_instituicao = get_selection($pdo,"Instituicao","instituicao","id","nome");
+    $select_pessoa = get_select($pdo,"Pessoa","pessoa","id","nome");
+    $select_instituicao = get_select($pdo,"Instituicao","instituicao","id","nome");
     $id_form = "adicionar1_form";
     $h1 = "<h1>Adicionar Participante</h1>";
     $form = "
     <form id='$id_form' method='post' action='#'>
-      <p>Nome: <input type='text' name='nome' /></p>
-      <p>CPF: <input type='text' name='cpf' /></p>
-      <p>Email: <input type='text' name='email' /></p>
-      <p>Telefone de contato: <input type='text' name='telefone_contato' /></p>
-      <p>Instituicao: $selection_instituicao</p>
+      <p>Pessoa: $select_pessoa</p>
+      <p>Instituicao: $select_instituicao</p>
       <p><input type='hidden' name='funcao' value='crud_participante_adicionar1_acao'></p>
       <a class='botao botao_acao' href='#' onclick='f2(\"$id_form\")'>Cadastrar</a>
     </form>";
@@ -268,55 +265,25 @@ class ParticipanteAdmin{
   public function adicionar1_acao($pdo,$POST){
     $resultado = "";
     $resultado .= $this->adicionar1_form($pdo,$POST);
-    $nome = isset($POST['nome'])?$POST['nome']:null;
-    $cpf = isset($POST['cpf'])?$POST['cpf']:null;
-    $email = isset($POST['email'])?$POST['email']:null;
-    $telefone_contato = isset($_POST['telefone_contato'])?$_POST['telefone_contato']:null;
-    $instituicao = isset($_POST['instituicao'])?$_POST['instituicao']:null;
-    if ($nome!=null and $cpf!=null and $email!=null){
-      $verificar_pessoa = array(
-         array("nome"=>"cpf", "valor"=>$cpf, "str"=>"sim"),
-         array("nome"=>"email", "valor"=>$email, "str"=>"sim"),
-      );
-      $inserir_pessoa = array(
-         array("nome"=>"nome", "valor"=>$nome, "str"=>"sim"),
-         array("nome"=>"cpf", "valor"=>$cpf, "str"=>"sim"),
-         array("nome"=>"email", "valor"=>$email, "str"=>"sim"),
-         array("nome"=>"telefone_contato", "valor"=>$telefone_contato, "str"=>"sim"),
-      );
-      $pessoa = get_by_fields($pdo,"Pessoa","pessoa",$verificar_pessoa);
-      if (!$pessoa){
-        $id_pessoa = insert_object($pdo,"Pessoa","pessoa",$inserir_pessoa); 
-        $resultado .= "Pessoa cadastrada com sucesso!<br>";
-      }else{
-        $resultado .= "Já existe uma pessoa com esse cpf e e-mail.<br>";
-        $id_pessoa = $pessoa->id;
-      }
-      $verificar_participante = array(
-         array("nome"=>"evento_id", "valor"=>1, "str"=>"nao"),
-         array("nome"=>"papel_id", "valor"=>2, "str"=>"nao"),
-         array("nome"=>"instituicao_id", "valor"=>$instituicao, "str"=>"nao"),
-      );
+    $id_pessoa = isset($POST['pessoa'])?$POST['pessoa']:null;
+    $id_instituicao = isset($_POST['instituicao'])?$_POST['instituicao']:null;
+    if ($id_pessoa!=null and $id_instituicao!=null){
       $inserir_participante = array(
          array("nome"=>"evento_id", "valor"=>1, "str"=>"nao"),
          array("nome"=>"pessoa_id", "valor"=>$id_pessoa, "str"=>"nao"),
          array("nome"=>"papel_id", "valor"=>2, "str"=>"nao"),
-         array("nome"=>"instituicao_id", "valor"=>$instituicao, "str"=>"nao"),
+         array("nome"=>"instituicao_id", "valor"=>$id_instituicao, "str"=>"nao"),
          array("nome"=>"situacao", "valor"=>"presente", "str"=>"sim"),
       );
-      $participante = get_by_fields($pdo,"Participante","participante",$verificar_participante);
-      if (!$participante){
+      try {
         $id_participante = insert_object($pdo,"Participante","participante",$inserir_participante); 
         $resultado .= "Participante cadastrado com sucesso!<br>";
-      }else{
-        $resultado .= "Já existe um participante com essas caracteristicas (evento,papel,instituicao).<br>";
+      } catch(PDOException $e) {
+        $resultado .= "MENSAGEM DE ERRO:<br>".$e->getMessage();
       }
     }
     return $resultado;
   }
-
-
-
   public function trocar_situacao($pdo,$POST){
     $id_participante = $POST['id_participante'];
     $situacao_final = $POST['situacao_final'];
@@ -336,16 +303,16 @@ class Usuario{
 }
 class UsuarioAdmin{
   public function adicionar_form($pdo,$POST){
-    $selection_pessoa = get_selection($pdo,"Pessoa","pessoa","id","nome");
-    $selection_perfil_usuario = get_selection($pdo,"PerfilUsuario","perfil_usuario","id","nome");
+    $select_pessoa = get_select($pdo,"Pessoa","pessoa","id","nome");
+    $select_perfil_usuario = get_select($pdo,"PerfilUsuario","perfil_usuario","id","nome");
     $funcaop = explode("_",$POST['funcao']);
     $classe = ($funcaop[0] == "crud")?$funcaop[1]:"";
     $id_form = "adicionar_form";
     $h1 = "<h1>Adicionar Usuário</h1>";
     $form = "
     <form id='$id_form' method='post' action='#'>
-      <p>Pessoa: $selection_pessoa</p>
-      <p>Perfil de usuário: $selection_perfil_usuario</p>
+      <p>Pessoa: $select_pessoa</p>
+      <p>Perfil de usuário: $select_perfil_usuario</p>
       <p>Nome de usuário: <input type='text' name='nome_usuario' /></p>
       <p>Senha: <input type='password' name='senha' /></p>
       <p>Confirmar Senha: <input type='password' name='confirmar_senha' /></p>
@@ -358,7 +325,6 @@ class UsuarioAdmin{
   public function adicionar_acao($pdo,$POST){
     $resultado = "";
     $resultado .= $this->adicionar_form($pdo,$POST);
-
     $id_pessoa = isset($POST['pessoa'])?$POST['pessoa']:null;
     $nome_usuario = isset($POST['nome_usuario'])?$POST['nome_usuario']:null;
     $senha = isset($POST['senha'])?$POST['senha']:null;
@@ -366,19 +332,14 @@ class UsuarioAdmin{
     $confirmar_senha = isset($POST['confirmar_senha'])?$POST['confirmar_senha']:null;
     if ($senha==$confirmar_senha and $senha!=null){
       $senha = password_hash($senha, PASSWORD_DEFAULT);
-      $usuario = $pdo->query( "SELECT * FROM usuario where pessoa_id=$id_pessoa and perfil_usuario_id=$id_perfil_usuario;")->fetchAll(PDO::FETCH_CLASS, 'Usuario');
-      $id_usuario = null;
-      if (count($usuario)==0){
+      try {
         $stmt = $pdo->prepare("INSERT INTO usuario(nome_usuario, senha, pessoa_id, perfil_usuario_id) VALUES(?,?,?,?)");
         $stmt->execute([$nome_usuario, $senha, $id_pessoa, $id_perfil_usuario]);
         $id_usuario = $pdo->lastInsertId();
-          $resultado .= "Adicionando Usuario ...  Adicionado ... \n";
-      }else{
-        $id_usuario = $usuario[0]->id;
-        $resultado .= "Adicionando Usuario ... Ja existente ... \n";
+        $resultado .= "Adicionando Usuario ...  Adicionado ... \n";
+      } catch(PDOException $e) {
+        $resultado .= "MENSAGEM DE ERRO:<br>".$e->getMessage();
       }
-      $resultado .= "id=$id_usuario <br>\n";
-
     }else{
       if ($senha!=null){
         $resultado .= "Senhas nao conferem!\n";
@@ -387,13 +348,13 @@ class UsuarioAdmin{
     return $resultado;
   }
   public function trocar_senha_form($pdo,$POST){
-    $selection_usuario = get_selection($pdo,"Usuario","usuario","id","nome_usuario");
+    $select_usuario = get_select($pdo,"Usuario","usuario","id","nome_usuario");
     $funcaop = explode("_",$POST['funcao']);
     $classe = ($funcaop[0] == "crud")?$funcaop[1]:"";
     $id_form = "trocar_senha_form";
     $form = "
     <form id='$id_form' method='post' action='#'>
-     <p>Usuário: $selection_usuario</p>
+     <p>Usuário: $select_usuario</p>
      <p>Nova Senha: <input type='password' name='nova_senha' /></p>
      <p>Confirmar Nova Senha: <input type='password' name='confirmar_nova_senha' /></p>
       <p><input type='hidden' name='funcao' value='crud_usuario_trocar_senha_acao'></p>
@@ -445,28 +406,24 @@ class PessoaAdmin{
     return $form;
   }
   public function adicionar_acao($pdo,$POST){
+    $resultado = "";
+    $resultado .= $this->adicionar_form($pdo,$POST);
     $nome = isset($POST['nome'])?$POST['nome']:null;
     $cpf = isset($POST['cpf'])?$POST['cpf']:null;
     $email = isset($POST['email'])?$POST['email']:null;
     $telefone_contato = isset($_POST['telefone_contato'])?$_POST['telefone_contato']:null;
-    $resultado = "";
     if ($nome!=null and $cpf!=null and $email!=null){
-      $verificar = array(
-         array("nome"=>"cpf", "valor"=>$cpf, "str"=>"sim"),
-         array("nome"=>"email", "valor"=>$email, "str"=>"sim"),
-      );
       $inserir = array(
          array("nome"=>"nome", "valor"=>$nome, "str"=>"sim"),
          array("nome"=>"cpf", "valor"=>$cpf, "str"=>"sim"),
          array("nome"=>"email", "valor"=>$email, "str"=>"sim"),
          array("nome"=>"telefone_contato", "valor"=>$telefone_contato, "str"=>"sim"),
       );
-      $pessoa = get_by_fields($pdo,"Pessoa","pessoa",$verificar);
-      if (!$pessoa){
-        $id_pessoa = insert_object($pdo,"Pessoa","pessoa",$inserir); 
+      try {
+        $id_pessoa = insert_object($pdo,"Pessoa","pessoa",$inserir);
         $resultado .= "Pessoa cadastrada com sucesso!";
-      }else{
-        $resultado .= "Já existe uma pessoa com esse cpf e e-mail.";
+      } catch(PDOException $e) {
+        $resultado .= "MENSAGEM DE ERRO:<br>".$e->getMessage();
       }
     }
     return $resultado;
@@ -536,7 +493,7 @@ function insert_object($pdo,$classe,$tabela,$fields){
   return $pdo->lastInsertId();
 }
 
-function get_selection($pdo,$classe,$tabela,$value,$text){
+function get_select($pdo,$classe,$tabela,$value,$text){
   $objetos = get_all($pdo,$classe,$tabela);
   $select_objeto = "<select name='$tabela'>";
   foreach ($objetos as $objeto){

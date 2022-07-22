@@ -1,6 +1,9 @@
+- Colocar todos os dados de determinada classe no formulario, mesmo que estejam desabilitados;
+- - Ex.: Evento; situacao; etc
+- Colocar valor em branco como primeira opção dos selections validar isso nos forms, se for o necessário 
 - Colocar HR em todas as telas.
 - anotar opcoes de chamar funcao por string no arquivo commandos
-  - https://mastigado.wordpress.com/2017/01/21/criando-instancia-de-classe-metodo-e-variavel-a-partir-de-uma-string-em-php/
+- - https://mastigado.wordpress.com/2017/01/21/criando-instancia-de-classe-metodo-e-variavel-a-partir-de-uma-string-em-php/
 - evitar que usuarios comum acessem acoes admin
 - Colocar pessoa->nome ao inves de usuario->nome_usuario no cookie
 - modelo padrao de form para qualquer form;
