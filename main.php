@@ -1,5 +1,51 @@
 <?php
 
+class Database{
+    private $pdo;
+    public function __construct(){ 
+      $host = "localhost"; $dbname = "eventos";
+      $user = "root"; $password = "senhademariadb";
+      $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+      $options = [
+        PDO::ATTR_EMULATE_PREPARES   => false, // Disable emulation mode for "real" prepared statements
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Disable errors in the form of exceptions
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // Make the default fetch be an associative array
+      ];
+      try{
+        $pdo = new PDO($dsn, $user, $password, $options);
+      }catch (Exception $e){
+        error_log($e->getMessage());
+        exit('Something bad happened'); 
+      }
+      $this->pdo = $pdo;
+    }
+    public function get_pdo(){
+      return $this->pdo;
+    }
+}
+
+class UsuarioDAO extends Database{
+    private $tabela = "usuario";
+    private $classe = "Usuario";
+    public function __construct(){
+      parent::__construct();
+    }
+    public function insert($POST){
+      $id_pessoa = isset($POST['pessoa'])?$POST['pessoa']:null;
+      $nome_usuario = isset($POST['nome_usuario'])?$POST['nome_usuario']:null;
+      $senha = isset($POST['senha'])?$POST['senha']:null;
+      $id_perfil_usuario = isset($POST['perfil_usuario'])?$POST['perfil_usuario']:null;
+      $senha = password_hash($senha, PASSWORD_DEFAULT);
+      try {
+        $stmt = $this->get_pdo()->prepare("INSERT INTO ".$this->tabela."(nome_usuario, senha, pessoa_id, perfil_usuario_id) VALUES(?,?,?,?)");
+        $stmt->execute([$nome_usuario, $senha, $id_pessoa, $id_perfil_usuario]);
+        return [$this->get_pdo()->lastInsertId(),null];
+      } catch(PDOException $e) {
+        return [null, "MENSAGEM DE ERRO:<br>".$e->getMessage()];
+      }
+    }
+}
+
 class SistemaAdmin{
   public function csv_verificar($pdo,$POST){
     $resultado = "<h1>Verificador de csv</h1>";
@@ -325,21 +371,12 @@ class UsuarioAdmin{
   public function adicionar_acao($pdo,$POST){
     $resultado = "";
     $resultado .= $this->adicionar_form($pdo,$POST);
-    $id_pessoa = isset($POST['pessoa'])?$POST['pessoa']:null;
-    $nome_usuario = isset($POST['nome_usuario'])?$POST['nome_usuario']:null;
     $senha = isset($POST['senha'])?$POST['senha']:null;
-    $id_perfil_usuario = isset($POST['perfil_usuario'])?$POST['perfil_usuario']:null;
     $confirmar_senha = isset($POST['confirmar_senha'])?$POST['confirmar_senha']:null;
     if ($senha==$confirmar_senha and $senha!=null){
-      $senha = password_hash($senha, PASSWORD_DEFAULT);
-      try {
-        $stmt = $pdo->prepare("INSERT INTO usuario(nome_usuario, senha, pessoa_id, perfil_usuario_id) VALUES(?,?,?,?)");
-        $stmt->execute([$nome_usuario, $senha, $id_pessoa, $id_perfil_usuario]);
-        $id_usuario = $pdo->lastInsertId();
-        $resultado .= "Adicionando Usuario ...  Adicionado ... \n";
-      } catch(PDOException $e) {
-        $resultado .= "MENSAGEM DE ERRO:<br>".$e->getMessage();
-      }
+      $usuarioDAO = new UsuarioDAO();
+      $rs = $usuarioDAO->insert($POST);
+      $resultado .= ($rs[0])?"Adicionado.":$rs[1];
     }else{
       if ($senha!=null){
         $resultado .= "Senhas nao conferem!\n";
